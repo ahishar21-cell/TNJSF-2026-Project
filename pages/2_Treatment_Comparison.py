@@ -179,7 +179,6 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("Counterfactual Treatment Predictions")
 st.caption("Estimated remission probability for the same patient under each candidate treatment.")
 
@@ -195,7 +194,6 @@ for i, row in results_df.iterrows():
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("Neurobiological Reason for Recommendation")
 
 top_reasons = []
