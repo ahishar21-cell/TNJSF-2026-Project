@@ -5,7 +5,7 @@ st.markdown("""
 <style>
 .card {
     background: #FCFDFE;
-    border: 100px solid #DCE6EF;
+    border: 1px solid #DCE6EF;
     padding: 1.1rem 1.2rem;
     border-radius: 20px;
     box-shadow: 0 3px 12px rgba(53, 92, 125, 0.05);
@@ -273,8 +273,6 @@ for reason in top_reasons:
     """, unsafe_allow_html=True)
 
 st.caption("Symptom-level neurobiological interpretation for demonstration purposes.")
-st.markdown('</div>', unsafe_allow_html=True)
-st.caption("Prototype explanation for demonstration only.")
 st.markdown('</div>', unsafe_allow_html=True)
 
 with st.expander("Current patient inputs"):
