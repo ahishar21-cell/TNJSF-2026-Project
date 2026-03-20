@@ -208,10 +208,11 @@ st.success(
     f"(final score {best['Final Recommended Score']:.3f})"
 )
 
-# ----------------------------
-# Explanation section
-# ----------------------------
-st.subheader("Neurobiological Interpretation of Recommendation")
+# ============================
+# MODEL-BASED EXPLANATION
+# ============================
+
+st.subheader("Model-Based Recommendation (Neurobiological Interpretation)")
 
 top_reasons = []
 
@@ -234,108 +235,121 @@ best_treatment = best["Treatment"]
 
 if best_treatment == "bupropion SR" and energy_concentration >= 6:
     top_reasons.append(
-        "High anhedonia (PHQ-1), fatigue (PHQ-4), and concentration impairment (PHQ-7) shifted the recommendation toward bupropion SR. "
-        "This symptom combination can be interpreted as a reward-deficit / low-motivation profile involving mesolimbic dopamine pathways and frontoparietal cognitive-control systems. "
-        "Because bupropion is a norepinephrine–dopamine reuptake inhibitor, this prototype gives it an advantage when the presentation is dominated by low energy, reduced drive, and impaired attention."
+        "Elevated anhedonia (PHQ-1), fatigue (PHQ-4), and concentration impairment (PHQ-7) suggest a reward-deficit and low-motivation phenotype. "
+        "This pattern is consistent with reduced dopaminergic signaling in mesolimbic pathways and reduced engagement of frontoparietal cognitive control networks. "
+        "Because bupropion is a norepinephrine–dopamine reuptake inhibitor, it is better aligned with restoring reward sensitivity, motivation, and cognitive effort."
     )
 
 if best_treatment == "citalopram + bupropion SR" and (
     energy_concentration >= 6 or mood_appetite_fatigue >= 6 or guilt_suicidality >= 3
 ):
     top_reasons.append(
-        "The recommendation favored citalopram + bupropion SR because the symptom profile spans multiple domains: mood disturbance (PHQ-2), energy reduction (PHQ-4), appetite change (PHQ-5), anhedonia (PHQ-1), or concentration deficits (PHQ-7). "
-        "In neuroscience terms, this suggests combined disruption across serotonergic affect-regulation systems and catecholaminergic reward / executive systems. "
-        "This prototype therefore favors augmentation when both mood-stabilization and energy/cognitive restoration appear relevant."
+        "The symptom profile spans multiple domains, including mood disturbance (PHQ-2), fatigue (PHQ-4), appetite change (PHQ-5), anhedonia (PHQ-1), and/or concentration deficits (PHQ-7). "
+        "This suggests combined disruption across serotonergic affect-regulation systems and catecholaminergic reward and executive-function networks. "
+        "Augmentation with both an SSRI and a norepinephrine–dopamine agent may better address this multi-network dysfunction."
     )
 
 if best_treatment == "citalopram + buspirone" and (
     patient.get("anxiety_disorder", 0) == 1 or guilt_suicidality >= 3
 ):
     top_reasons.append(
-        "The recommendation shifted toward citalopram + buspirone because guilt/worthlessness (PHQ-6), suicidal ideation (PHQ-9), or anxiety burden were elevated. "
-        "This is treated as a high internal-distress profile involving amygdala–medial prefrontal circuitry and heightened affective salience. "
-        "Buspirone is often framed around 5-HT1A receptor activity and anxiolytic serotonergic modulation, so the prototype increases its score when the phenotype is more anxiety-distress weighted."
+        "Elevated guilt (PHQ-6), suicidal ideation (PHQ-9), or comorbid anxiety suggest a high internal-distress phenotype involving hyperactivity in amygdala–medial prefrontal circuits. "
+        "Buspirone modulates 5-HT1A receptors and may help regulate serotonergic tone in these circuits, so the prototype increases its score in anxiety-weighted or distress-heavy presentations."
     )
 
 if best_treatment == "sertraline" and sleep_psychomotor >= 4:
     top_reasons.append(
-        "The recommendation shifted toward sertraline because sleep disturbance (PHQ-3) and psychomotor symptoms (PHQ-8) were more prominent. "
-        "This prototype interprets that cluster as more consistent with serotonergic dysregulation affecting arousal regulation, motor-affective pacing, and circadian symptom dimensions. "
-        "Sertraline therefore receives a higher score when the presentation is driven more by sleep/psychomotor burden than by a pure reward-deficit phenotype."
+        "Prominent sleep disturbance (PHQ-3) and psychomotor changes (PHQ-8) suggest dysregulation in arousal systems and motor-affective pacing. "
+        "These features are associated here with serotonergic dysfunction affecting sleep–wake regulation and behavioral activation, so sertraline receives a higher score."
     )
 
 if best_treatment == "venlafaxine XR" and (
     sleep_psychomotor >= 4 or mood_appetite_fatigue >= 6
 ):
     top_reasons.append(
-        "The recommendation favored venlafaxine XR because the symptom pattern reflects broader depressive burden involving depressed mood (PHQ-2), fatigue (PHQ-4), appetite change (PHQ-5), and/or sleep and psychomotor disruption (PHQ-3, PHQ-8). "
-        "This prototype treats that as a more diffuse monoaminergic dysregulation profile spanning serotonergic and noradrenergic domains, so a dual-action SNRI becomes more competitive."
-    )
-
-if phq9 >= 2:
-    top_reasons.append(
-        "Elevated suicidal ideation (PHQ-9) increased the relative score of augmentation-based strategies. "
-        "In this prototype, higher suicidality is treated as reflecting greater prefrontal–limbic dysregulation and clinical complexity, making broader stabilization strategies relatively more favorable than simpler switch options."
+        "A broader symptom burden across mood (PHQ-2), fatigue (PHQ-4), appetite (PHQ-5), and sleep/psychomotor domains (PHQ-3, PHQ-8) suggests more diffuse monoaminergic dysregulation. "
+        "This includes both serotonergic and noradrenergic systems affecting affective tone, autonomic function, and energy regulation, making venlafaxine XR more competitive."
     )
 
 if patient.get("baseline_QIDS_SR16", 0) >= 18:
     top_reasons.append(
-        "Higher overall symptom severity reduced remission probability overall, while making broader-coverage treatments relatively more competitive. "
-        "At a systems level, this is interpreted as more distributed dysfunction across affective, reward, autonomic, and executive-control networks."
+        "Higher overall symptom severity indicates more distributed dysfunction across affective, reward, autonomic, and executive-control networks, "
+        "which increases the relative value of broader or combination-based treatment strategies."
     )
 
-# Risk-factor / feasibility explanations
-if patient.get("income_band", "middle") == "low":
+if phq9 >= 2:
     top_reasons.append(
-        "Low income increased the penalty on more complex regimens because cost burden can reduce adherence and increase dropout risk in real-world care."
-    )
-
-if patient.get("insurance_type", "private") == "public":
-    top_reasons.append(
-        "Public insurance increased feasibility concerns for more complex treatment pathways, which lowered the final score of options with higher practical burden."
-    )
-
-if patient.get("employed", 1) == 0:
-    top_reasons.append(
-        "Not being employed increased practical disengagement risk, which reduced the final score of more demanding augmentation strategies."
-    )
-
-if patient.get("chronic_episode_gt_2y", 0) == 1:
-    top_reasons.append(
-        "A chronic depressive episode lowered predicted remission across all options, consistent with lower average remission in more persistent illness."
-    )
-
-if patient.get("recurrent_mdd", 0) == 1:
-    top_reasons.append(
-        "Recurrent depression lowered overall remission probability, reflecting a more treatment-resistant baseline profile."
-    )
-
-if patient.get("medical_comorbidity_count", 0) >= 3:
-    top_reasons.append(
-        "Higher medical comorbidity reduced the expected success of treatment overall and slightly penalized more complex regimens."
-    )
-
-if patient.get("baseline_function_score", 50) < 40:
-    top_reasons.append(
-        "Lower baseline functioning reduced remission probability and increased adherence vulnerability."
-    )
-
-if patient.get("baseline_qol_score", 50) < 40:
-    top_reasons.append(
-        "Lower baseline quality of life reduced expected remission probability across options."
+        "Elevated suicidal ideation suggests greater prefrontal–limbic dysregulation and clinical complexity, which shifts the model toward augmentation strategies rather than simpler switch options."
     )
 
 if not top_reasons:
     top_reasons.append(
-        "The recommendation was driven by the interaction between PHQ-9 symptom structure and broader clinical feasibility factors rather than total severity alone."
+        "The recommendation is driven by the interaction between PHQ-9 symptom structure and inferred neurobiological patterns rather than total severity alone."
     )
 
 for reason in top_reasons:
     st.write(f"- {reason}")
 
 st.caption(
-    "These explanations are neuroscience-informed prototype interpretations for demonstration only and do not represent validated causal prescribing rules."
+    "This section reflects a symptom-level, neuroscience-informed interpretation of treatment selection based on PHQ-9 structure."
 )
 
+# ============================
+# REAL-WORLD CONSTRAINTS BOX
+# ============================
+
+st.subheader("Real-World Constraints & Risk Factors")
+
+warnings = []
+
+if patient.get("income_band", "middle") == "low":
+    warnings.append("Lower income may introduce financial barriers to sustained treatment adherence.")
+
+if patient.get("insurance_type", "private") == "public":
+    warnings.append("Insurance limitations may affect medication access, provider availability, or follow-up care.")
+
+if patient.get("employed", 1) == 0:
+    warnings.append("Unemployment may increase risk of treatment disengagement or inconsistent follow-up.")
+
+if patient.get("chronic_episode_gt_2y", 0) == 1:
+    warnings.append("Chronic depression is associated with reduced remission probability across treatments.")
+
+if patient.get("recurrent_mdd", 0) == 1:
+    warnings.append("Recurrent depressive episodes suggest increased baseline treatment resistance.")
+
+if patient.get("substance_use_disorder", 0) == 1:
+    warnings.append("Substance use may interfere with both treatment response and adherence.")
+
+if patient.get("medical_comorbidity_count", 0) >= 3:
+    warnings.append("Higher medical comorbidity may complicate treatment selection and reduce response rates.")
+
+if patient.get("baseline_function_score", 50) < 40:
+    warnings.append("Lower baseline functioning increases risk of disengagement and poorer outcomes.")
+
+if patient.get("baseline_qol_score", 50) < 40:
+    warnings.append("Lower quality of life is associated with reduced likelihood of remission.")
+
+if patient.get("level1_response", 0) == 0:
+    warnings.append("Lack of response to initial treatment suggests need for more complex or multi-step care.")
+
+if warnings:
+    st.markdown("""
+    <div style="
+        background: #F8FAFC;
+        border: 1px solid #CBD5F5;
+        padding: 1rem;
+        border-radius: 15px;
+        margin-top: 0.5rem;
+    ">
+    <b style="color:#3730A3;">⚠️ Contextual factors that may influence real-world outcomes</b><br><br>
+    """, unsafe_allow_html=True)
+
+    for w in warnings:
+        st.markdown(f"- {w}")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+else:
+    st.info("No major real-world risk factors identified.")
+    
 with st.expander("Current patient inputs"):
     st.dataframe(pd.DataFrame([patient]), use_container_width=True)
