@@ -272,8 +272,5 @@ for reason in top_reasons:
     </div>
     """, unsafe_allow_html=True)
 
-st.caption("Symptom-level neurobiological interpretation for demonstration purposes.")
-st.markdown('</div>', unsafe_allow_html=True)
-
 with st.expander("Current patient inputs"):
     st.dataframe(pd.DataFrame([patient]), use_container_width=True)
