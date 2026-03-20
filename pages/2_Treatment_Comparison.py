@@ -5,7 +5,7 @@ st.markdown("""
 <style>
 .card {
     background: #FCFDFE;
-    border: 1px solid #DCE6EF;
+    border: 2px solid #DCE6EF;
     padding: 1.1rem 1.2rem;
     border-radius: 20px;
     box-shadow: 0 3px 12px rgba(53, 92, 125, 0.05);
