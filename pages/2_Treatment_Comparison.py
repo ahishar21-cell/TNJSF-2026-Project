@@ -290,10 +290,6 @@ if not top_reasons:
 for reason in top_reasons:
     st.write(f"- {reason}")
 
-st.caption(
-    "This section reflects a symptom-level, neuroscience-informed interpretation of treatment selection based on PHQ-9 structure."
-)
-
 # ============================
 # REAL-WORLD CONSTRAINTS BOX
 # ============================
