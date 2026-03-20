@@ -198,7 +198,7 @@ for i, row in results_df.iterrows():
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="card">', unsafe_allow_html=True)
-st.subheader("Why the recommendation changed")
+st.subheader("Reason for recommendation")
 
 st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("Neurobiological Interpretation of Recommendation")
