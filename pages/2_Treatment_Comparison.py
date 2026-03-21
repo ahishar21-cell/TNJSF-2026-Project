@@ -212,7 +212,7 @@ st.success(
 # MODEL-BASED EXPLANATION
 # ============================
 
-st.subheader("Model-Based Recommendation (Neurobiological Interpretation)")
+st.subheader("Model-Based Recommendation (Explanation of Neuroscience)")
 
 top_reasons = []
 
